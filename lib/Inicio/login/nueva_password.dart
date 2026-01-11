@@ -123,23 +123,36 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // --- LÓGICA DE COLORES DINÁMICOS ---
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFFFE8DA);
+    final cardColor =
+        isDark ? const Color(0xFF1F1F1F) : const Color(0xFFFFCFB0);
+    final accent = isDark ? const Color(0xFF333333) : const Color(0xFFFF9350);
+    final textColor = isDark ? Colors.white : const Color(0xFF492714);
+    // Inputs
+    final inputFill = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+    final inputText = isDark ? Colors.white : Colors.black;
+    final hintText = isDark ? Colors.white70 : const Color(0xFF492714);
+
     final maxWidth = MediaQuery.of(context).size.width * 0.95;
     final cardWidth = maxWidth > 520.0 ? 520.0 : maxWidth;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE8DA),
+      backgroundColor: bgColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Nueva contraseña',
           style: TextStyle(
-            color: Color(0xFF492714),
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF492714)),
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -150,7 +163,7 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
             width: cardWidth,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFCFB0),
+              color: cardColor,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -165,12 +178,12 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     'MyGasolinera',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -184,9 +197,9 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                   // Mostrar el email
                   Text(
                     'Código enviado a: ${widget.email}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Color(0xFF492714),
+                      color: textColor,
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -198,15 +211,18 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                     controller: _tokenController,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-                    style: const TextStyle(fontSize: 20, letterSpacing: 8),
+                    style: TextStyle(
+                        fontSize: 20, letterSpacing: 8, color: inputText),
                     textAlign: TextAlign.center,
                     enabled: !_isLoading,
                     decoration: InputDecoration(
                       hintText: '000000',
-                      hintStyle: const TextStyle(letterSpacing: 8),
+                      hintStyle: TextStyle(
+                          letterSpacing: 8, color: hintText.withOpacity(0.5)),
                       labelText: 'Código de recuperación',
+                      labelStyle: TextStyle(color: hintText),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: inputFill,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -232,13 +248,14 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                     controller: _passwordController,
                     focusNode: _passwordFocus,
                     obscureText: true,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: inputText),
                     enabled: !_isLoading,
                     onChanged: (_) => setState(() {}),
                     decoration: InputDecoration(
                       hintText: 'Nueva contraseña',
+                      hintStyle: TextStyle(color: hintText),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: inputFill,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -261,7 +278,7 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                   PasswordRequirements(
                     password: _passwordController.text,
                     isVisible: _showPasswordRequirements,
-                    primaryColor: const Color(0xFF492714),
+                    primaryColor: textColor,
                   ),
                   const SizedBox(height: 16),
 
@@ -269,12 +286,13 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                   TextFormField(
                     controller: _confirmController,
                     obscureText: true,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: inputText),
                     enabled: !_isLoading,
                     decoration: InputDecoration(
                       hintText: 'Confirmar contraseña',
+                      hintStyle: TextStyle(color: hintText),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: inputFill,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -299,15 +317,15 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed:
-                          (_isLoading ||
+                      onPressed: (_isLoading ||
                               !_isPasswordValid() ||
                               _tokenController.text.isEmpty)
                           ? null
                           : _handleChangePassword,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF9955),
-                        foregroundColor: const Color(0xFF492714),
+                        backgroundColor: accent,
+                        foregroundColor:
+                            isDark ? Colors.white : const Color(0xFF492714),
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -319,13 +337,15 @@ class _NuevaPasswordScreenState extends State<NuevaPasswordScreen> {
                         ),
                       ),
                       child: _isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  Color(0xFF492714),
+                                  isDark
+                                      ? Colors.white
+                                      : const Color(0xFF492714),
                                 ),
                               ),
                             )

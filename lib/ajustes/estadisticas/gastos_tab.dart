@@ -28,7 +28,7 @@ class _GastosTabState extends State<GastosTab> {
 
     try {
       final data = await EstadisticasService.obtenerTodasEstadisticas();
-      
+
       if (mounted) {
         setState(() {
           _estadisticas = data;
@@ -85,7 +85,8 @@ class _GastosTabState extends State<GastosTab> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFF9350),
             ),
-            child: const Text('Reintentar', style: TextStyle(color: Colors.white)),
+            child:
+                const Text('Reintentar', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -125,22 +126,21 @@ class _GastosTabState extends State<GastosTab> {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Card: Gasto Total
           EstadisticasWidgets.buildStatCard(
+            context: context,
             title: 'Gasto Total',
             value: '€${_formatNumber(resumen['gasto_total'])}',
             subtitle: '${resumen['total_facturas']} repostajes',
             icon: Icons.account_balance_wallet,
             color: const Color(0xFFFF9350),
-            // Asegúrate de que tu buildStatCard acepte un parámetro de contexto o tema, 
-            // o que use Theme.of(context) internamente. Si no, necesitarás modificar ese widget también.
-            // Por ahora, asumiremos que EstadisticasWidgets ya maneja el tema o que lo modificarás después.
           ),
           const SizedBox(height: 12),
 
           // Card: Mes Actual
           EstadisticasWidgets.buildStatCard(
+            context: context,
             title: 'Mes Actual',
             value: '€${_formatNumber(mesActual['gasto'])}',
             subtitle: '${mesActual['facturas']} repostajes',
@@ -155,9 +155,11 @@ class _GastosTabState extends State<GastosTab> {
 
           // Card: Promedio por Factura
           EstadisticasWidgets.buildStatCard(
+            context: context,
             title: 'Promedio por Repostaje',
             value: '€${_formatNumber(resumen['promedio_por_factura'])}',
-            subtitle: 'Min: €${_formatNumber(resumen['gasto_minimo'])} - Max: €${_formatNumber(resumen['gasto_maximo'])}',
+            subtitle:
+                'Min: €${_formatNumber(resumen['gasto_minimo'])} - Max: €${_formatNumber(resumen['gasto_maximo'])}',
             icon: Icons.trending_up,
             color: const Color(0xFFFF9350),
           ),
@@ -174,10 +176,12 @@ class _GastosTabState extends State<GastosTab> {
   Widget _buildComparativaCard(Map<String, dynamic> comparativa) {
     final mesActual = comparativa['mes_actual'];
     final mesAnterior = comparativa['mes_anterior'];
-    final porcentaje = double.tryParse(comparativa['porcentaje_cambio'].toString()) ?? 0;
+    final porcentaje =
+        double.tryParse(comparativa['porcentaje_cambio'].toString()) ?? 0;
     final isPositive = porcentaje >= 0;
 
     return EstadisticasWidgets.buildComparativaCard(
+      context: context,
       mesActual: mesActual,
       mesAnterior: mesAnterior,
       porcentaje: porcentaje,
@@ -192,6 +196,7 @@ class _GastosTabState extends State<GastosTab> {
     final proyeccionFin = proyeccion['proyeccion_fin_mes'];
 
     return EstadisticasWidgets.buildProyeccionCard(
+      context: context,
       gastoActual: gastoActual,
       diasTranscurridos: diasTranscurridos,
       diasTotales: diasTotales,

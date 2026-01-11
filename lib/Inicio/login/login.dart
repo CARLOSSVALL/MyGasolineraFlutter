@@ -135,14 +135,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // --- LÓGICA DE COLORES DINÁMICOS ---
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final scaffoldBg =
+        isDark ? const Color(0xFF121212) : const Color(0xFFFFE8DA);
+    final textColor = isDark ? Colors.white : const Color(0xFF492714);
+    final inputFillColor =
+        isDark ? const Color(0xFF2C2C2C) : const Color(0xFFFFD4B8);
+    final inputTextColor = isDark ? Colors.white : Colors.black;
+    final hintColor = isDark ? Colors.white70 : const Color(0xFF492714);
+    final iconColor = isDark ? Colors.white : const Color(0xFF492714);
+
+    // Botones
+    final btn1Fg = isDark ? Colors.black : Colors.white;
+    final btn1Bg = isDark ? Colors.white : const Color(0xFFFF9955);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE8DA),
+      backgroundColor: scaffoldBg,
       appBar: AppBar(
         title: const Text('Volver'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF492714)),
+          icon: Icon(Icons.arrow_back, color: iconColor),
           onPressed: () {
             // MODIFICACIÓN AQUÍ: Navegar a Inicio en lugar de pop
             Navigator.pushReplacement(
@@ -150,6 +166,11 @@ class _LoginScreenState extends State<LoginScreen> {
               MaterialPageRoute(builder: (context) => const Inicio()),
             );
           },
+        ),
+        titleTextStyle: TextStyle(
+          color: textColor,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
         ),
       ),
       body: Center(
@@ -167,12 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     Container(
                       margin: const EdgeInsets.only(bottom: 30.0),
-                      child: const Text(
+                      child: Text(
                         'MyGasolinera',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF492714),
+                          color: textColor,
                         ),
                       ),
                     ),
@@ -193,11 +214,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       focusNode: _emailFocus,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => _handleFieldSubmit('email'),
+                      style: TextStyle(color: inputTextColor),
                       decoration: InputDecoration(
                         hintText: 'Email o Usuario',
-                        hintStyle: const TextStyle(color: Color(0xFF492714)),
+                        hintStyle: TextStyle(color: hintColor),
                         filled: true,
-                        fillColor: const Color(0xFFFFD4B8),
+                        fillColor: inputFillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -231,11 +253,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _handleFieldSubmit('password'),
                       obscureText: _obscurePassword,
+                      style: TextStyle(color: inputTextColor),
                       decoration: InputDecoration(
                         hintText: 'Contraseña',
-                        hintStyle: const TextStyle(color: Color(0xFF492714)),
+                        hintStyle: TextStyle(color: hintColor),
                         filled: true,
-                        fillColor: const Color(0xFFFFD4B8),
+                        fillColor: inputFillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -249,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             _obscurePassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: Color(0xFF492714),
+                            color: iconColor,
                           ),
                           onPressed: () {
                             setState(() {
@@ -278,11 +301,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           },
                           activeColor: const Color(0xFFFF9350),
-                          checkColor: const Color(0xFF492714),
+                          checkColor: Colors.white,
+                          side: BorderSide(color: iconColor),
                         ),
-                        const Text(
+                        Text(
                           'Recuérdame',
-                          style: TextStyle(color: Color(0xFF492714)),
+                          style: TextStyle(color: textColor),
                         ),
                       ],
                     ),
@@ -302,24 +326,54 @@ class _LoginScreenState extends State<LoginScreen> {
                           elevation: 0,
                         ),
                         child: _isLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF492714),
+                                    textColor,
                                   ),
                                 ),
                               )
-                            : const Text(
+                            : Text(
                                 'Iniciar sesión',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Color(0xFF492714),
+                                  color:
+                                      btn1Fg, // Mantenemos contraste en el botón naranja
                                 ),
                               ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // BOTÓN INVITADO (NUEVO)
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Layouthome()),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                            color:
+                                btn1Bg), // Borde del color del botón principal
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        'Acceder como invitado',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: textColor, // Texto adaptable al tema
+                        ),
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -333,10 +387,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         '¿Has olvidado la contraseña?',
                         style: TextStyle(
-                          color: Color(0xFF492714),
+                          color: textColor,
                           decoration: TextDecoration.underline,
                         ),
                       ),

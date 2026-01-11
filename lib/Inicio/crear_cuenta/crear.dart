@@ -112,7 +112,7 @@ class _CrearScreenState extends State<CrearScreen> {
               backgroundColor: Colors.green,
             ),
           );
-          
+
           // Navegar automáticamente a login después de 2 segundos
           Future.delayed(const Duration(seconds: 2), () {
             Navigator.pushReplacement(
@@ -122,10 +122,9 @@ class _CrearScreenState extends State<CrearScreen> {
               ),
             );
           });
-          
+
           // Limpiar formulario
           _formKey.currentState!.reset();
-          
         } else {
           // Error del servidor
           ScaffoldMessenger.of(context).showSnackBar(
@@ -172,15 +171,32 @@ class _CrearScreenState extends State<CrearScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // --- LÓGICA DE COLORES DINÁMICOS ---
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final scaffoldBg =
+        isDark ? const Color(0xFF121212) : const Color(0xFFFFE8DA);
+    final textColor = isDark ? Colors.white : const Color(0xFF492714);
+    final inputFillColor =
+        isDark ? const Color(0xFF2C2C2C) : const Color(0xFFFFD4B8);
+    final inputTextColor = isDark ? Colors.white : Colors.black;
+    final hintColor = isDark ? Colors.white70 : const Color(0xFF492714);
+    final iconColor = isDark ? Colors.white : const Color(0xFF492714);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE8DA),
+      backgroundColor: scaffoldBg,
       appBar: AppBar(
         title: const Text('Volver'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF492714)),
+          icon: Icon(Icons.arrow_back, color: iconColor),
           onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleTextStyle: TextStyle(
+          color: textColor,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
         ),
       ),
       body: Center(
@@ -198,12 +214,12 @@ class _CrearScreenState extends State<CrearScreen> {
 
                     Container(
                       margin: const EdgeInsets.only(bottom: 30.0),
-                      child: const Text(
+                      child: Text(
                         'MyGasolinera',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF492714),
+                          color: textColor,
                         ),
                       ),
                     ),
@@ -224,13 +240,14 @@ class _CrearScreenState extends State<CrearScreen> {
                       focusNode: _nombreFocus,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => _handleFieldSubmit('nombre'),
+                      style: TextStyle(color: inputTextColor),
                       decoration: InputDecoration(
                         hintText: 'Nombre completo',
-                        hintStyle: const TextStyle(
-                          color: Color(0xFF492714),
+                        hintStyle: TextStyle(
+                          color: hintColor,
                         ),
                         filled: true,
-                        fillColor: const Color(0xFFFFD4B8),
+                        fillColor: inputFillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -255,13 +272,14 @@ class _CrearScreenState extends State<CrearScreen> {
                       focusNode: _emailFocus,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => _handleFieldSubmit('email'),
+                      style: TextStyle(color: inputTextColor),
                       decoration: InputDecoration(
                         hintText: 'E-mail',
-                        hintStyle: const TextStyle(
-                          color: Color(0xFF492714),
+                        hintStyle: TextStyle(
+                          color: hintColor,
                         ),
                         filled: true,
-                        fillColor: const Color(0xFFFFD4B8),
+                        fillColor: inputFillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -283,7 +301,7 @@ class _CrearScreenState extends State<CrearScreen> {
                       },
                     ),
                     const SizedBox(height: 15),
-                    
+
                     // Campo de contraseña
                     TextFormField(
                       controller: _passwordController,
@@ -292,13 +310,14 @@ class _CrearScreenState extends State<CrearScreen> {
                       onFieldSubmitted: (_) => _handleFieldSubmit('password'),
                       onChanged: (_) => setState(() {}),
                       obscureText: _obscurePassword,
+                      style: TextStyle(color: inputTextColor),
                       decoration: InputDecoration(
                         hintText: 'Contraseña',
-                        hintStyle: const TextStyle(
-                          color: Color(0xFF492714),
+                        hintStyle: TextStyle(
+                          color: hintColor,
                         ),
                         filled: true,
-                        fillColor: const Color(0xFFFFD4B8),
+                        fillColor: inputFillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -312,7 +331,7 @@ class _CrearScreenState extends State<CrearScreen> {
                             _obscurePassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: Color(0xFF492714),
+                            color: iconColor,
                           ),
                           onPressed: () {
                             setState(() {
@@ -334,27 +353,29 @@ class _CrearScreenState extends State<CrearScreen> {
                     PasswordRequirements(
                       password: _passwordController.text,
                       isVisible: _showPasswordRequirements,
-                      primaryColor: const Color(0xFF492714),
+                      primaryColor: textColor,
                       successColor: Colors.green,
                       errorColor: Colors.red,
-                      backgroundColor: const Color(0xFFFFE8DA),
+                      backgroundColor: scaffoldBg,
                     ),
                     const SizedBox(height: 15),
-                    
+
                     // Campo de confirmar contraseña
                     TextFormField(
                       controller: _confirmPasswordController,
                       focusNode: _confirmPasswordFocus,
                       textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) => _handleFieldSubmit('confirmPassword'),
+                      onFieldSubmitted: (_) =>
+                          _handleFieldSubmit('confirmPassword'),
                       obscureText: _obscureConfirmPassword,
+                      style: TextStyle(color: inputTextColor),
                       decoration: InputDecoration(
                         hintText: 'Confirmar contraseña',
-                        hintStyle: const TextStyle(
-                          color: Color(0xFF492714),
+                        hintStyle: TextStyle(
+                          color: hintColor,
                         ),
                         filled: true,
-                        fillColor: const Color(0xFFFFD4B8),
+                        fillColor: inputFillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -368,11 +389,12 @@ class _CrearScreenState extends State<CrearScreen> {
                             _obscureConfirmPassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: Color(0xFF492714),
+                            color: iconColor,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -388,12 +410,17 @@ class _CrearScreenState extends State<CrearScreen> {
                       },
                     ),
                     const SizedBox(height: 30),
-                    
+
                     // Botón de crear
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: (_isLoading || !_isPasswordValid() || _emailController.text.isEmpty || _nombreController.text.isEmpty) ? null : _registrarUsuario,
+                        onPressed: (_isLoading ||
+                                !_isPasswordValid() ||
+                                _emailController.text.isEmpty ||
+                                _nombreController.text.isEmpty)
+                            ? null
+                            : _registrarUsuario,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFF9955),
                           padding: const EdgeInsets.symmetric(vertical: 20),
@@ -403,12 +430,13 @@ class _CrearScreenState extends State<CrearScreen> {
                           elevation: 0,
                         ),
                         child: _isLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF492714)),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF492714)),
                                 ),
                               )
                             : const Text(

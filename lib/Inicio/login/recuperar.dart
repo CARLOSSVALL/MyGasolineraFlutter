@@ -79,15 +79,26 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
   // Colores usados en los campos
   @override
   Widget build(BuildContext context) {
-    final bgColor = const Color(0xFFFFE8DA);
-    final cardColor = const Color(0xFFFFCFB0);
-    final accent = const Color(0xFFFF9350);
+    // --- LÓGICA DE COLORES DINÁMICOS ---
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF121212) : const Color(0xFFFFE8DA);
+    final cardColor =
+        isDark ? const Color(0xFF1F1F1F) : const Color(0xFFFFCFB0);
+    final accent = isDark
+        ? const Color(0xFF333333)
+        : const Color(0xFFFF9350); // Botón más discreto en dark
+    // Texto
+    final textColor = isDark ? Colors.white : const Color(0xFF492714);
+    // Inputs
+    final inputFill = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+    final inputText = isDark ? Colors.white : Colors.black;
+    final hintText = isDark ? Colors.white70 : const Color(0xFF492714);
 
     final maxWidth =
         MediaQuery.of(context).size.width * 0.95; // Aumentado de 0.85 a 0.95
-    final cardWidth = maxWidth > 520.0
-        ? 520.0
-        : maxWidth; // Aumentado de 420 a 520
+    final cardWidth =
+        maxWidth > 520.0 ? 520.0 : maxWidth; // Aumentado de 420 a 520
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -96,8 +107,13 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF492714)),
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleTextStyle: TextStyle(
+          color: textColor,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
         ),
       ),
       body: Center(
@@ -131,12 +147,12 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 12), // Aumentado de 8 a 12
-                  const Text(
+                  Text(
                     'MyGasolinera',
                     style: TextStyle(
                       fontSize: 28, // Aumentado de 22 a 28
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -156,12 +172,12 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Recuperar contraseña',
                     style: TextStyle(
                       fontSize: 24, // Aumentado de 20 a 24
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                   const SizedBox(height: 24), // Aumentado de 18 a 24
@@ -169,17 +185,18 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                    ), // Añadido tamaño de fuente
+                      color: inputText,
+                    ), // Añadido tamaño de fuente y color dinámico
                     enabled: !_isLoading,
                     // Añadir el manejador de teclas
                     onFieldSubmitted: (value) => _handleForgotPassword(),
                     decoration: InputDecoration(
                       hintText: 'e-mail',
-                      hintStyle: const TextStyle(color: Color(0xFF492714)),
+                      hintStyle: TextStyle(color: hintText),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: inputFill,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 18,
                         vertical: 16,
@@ -188,12 +205,12 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
                         borderRadius: BorderRadius.circular(
                           10,
                         ), // Aumentado de 8 a 10
-                        borderSide: const BorderSide(color: Color(0xFF492714)),
+                        borderSide: BorderSide(color: hintText),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF492714),
+                        borderSide: BorderSide(
+                          color: textColor,
                           width: 2,
                         ),
                       ),
@@ -218,7 +235,8 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
                       onPressed: _isLoading ? null : _handleForgotPassword,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: accent,
-                        foregroundColor: const Color(0xFF492714),
+                        foregroundColor:
+                            isDark ? Colors.white : const Color(0xFF492714),
                         padding: const EdgeInsets.symmetric(
                           vertical: 18,
                         ), // Aumentado de 14 a 18
@@ -230,13 +248,15 @@ class _RecuperarPasswordState extends State<RecuperarPassword> {
                         ), // Añadido tamaño de fuente
                       ),
                       child: _isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  Color(0xFF492714),
+                                  isDark
+                                      ? Colors.white
+                                      : const Color(0xFF492714),
                                 ),
                               ),
                             )

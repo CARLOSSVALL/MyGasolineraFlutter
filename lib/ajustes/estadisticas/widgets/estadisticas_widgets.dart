@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 
 class EstadisticasWidgets {
   static Widget buildStatCard({
+    required BuildContext context,
     required String title,
     required String value,
     required String subtitle,
     required IconData icon,
     required Color color,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+    final titleColor = isDark ? Colors.grey[400] : Colors.grey;
+    final valueColor = isDark ? Colors.white : const Color(0xFF492714);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -38,19 +44,19 @@ class EstadisticasWidgets {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey,
+                    color: titleColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF492714),
+                    color: valueColor,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -70,15 +76,20 @@ class EstadisticasWidgets {
   }
 
   static Widget buildComparativaCard({
+    required BuildContext context,
     required dynamic mesActual,
     required dynamic mesAnterior,
     required double porcentaje,
     required bool isPositive,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+    final textColor = isDark ? Colors.white : const Color(0xFF492714);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -106,13 +117,13 @@ class EstadisticasWidgets {
                 ),
               ),
               const SizedBox(width: 16),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Comparativa Mensual',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF492714),
+                    color: textColor,
                   ),
                 ),
               ),
@@ -131,10 +142,10 @@ class EstadisticasWidgets {
                   ),
                   Text(
                     '€${_formatNumber(mesActual)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -153,10 +164,10 @@ class EstadisticasWidgets {
                   ),
                   Text(
                     '€${_formatNumber(mesAnterior)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -198,17 +209,22 @@ class EstadisticasWidgets {
   }
 
   static Widget buildProyeccionCard({
+    required BuildContext context,
     required dynamic gastoActual,
     required int diasTranscurridos,
     required int diasTotales,
     required dynamic proyeccionFin,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+    final textColor = isDark ? Colors.white : const Color(0xFF492714);
+
     final progreso = diasTranscurridos / diasTotales;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -236,13 +252,13 @@ class EstadisticasWidgets {
                 ),
               ),
               const SizedBox(width: 16),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Proyección Fin de Mes',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF492714),
+                    color: textColor,
                   ),
                 ),
               ),
@@ -261,10 +277,10 @@ class EstadisticasWidgets {
                   ),
                   Text(
                     '€${_formatNumber(gastoActual)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -301,10 +317,10 @@ class EstadisticasWidgets {
                   ),
                   Text(
                     '${(progreso * 100).toStringAsFixed(0)}%',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF492714),
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -314,7 +330,7 @@ class EstadisticasWidgets {
                 borderRadius: BorderRadius.circular(4),
                 child: LinearProgressIndicator(
                   value: progreso,
-                  backgroundColor: Colors.grey[300],
+                  backgroundColor: isDark ? Colors.white12 : Colors.grey[300],
                   valueColor: const AlwaysStoppedAnimation<Color>(
                     Color(0xFFFF9350),
                   ),
